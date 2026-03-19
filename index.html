@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍽️ Sabor Casero — Comida hecha con amor</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sand:    #FDF6EC;
+  --warm:    #FAE8CC;
+  --peach:   #FF8C69;
+  --peach-d: #e0714f;
+  --tomato:  #E8433A;
+  --honey:   #F5A623;
+  --mint:    #3DBFA0;
+  --mint-d:  #2da089;
+  --sky:     #5B9BD5;
+  --plum:    #8E5EA2;
+  --rose:    #E87EA1;
+  --cream:   #FFFBF5;
+  --dark:    #1E1B18;
+  --muted:   #7A6F65;
+  --border:  #EDE0CE;
+  --r:       18px;
+  --sh:      0 4px 24px rgba(30,27,24,.09);
+  --sh-h:    0 12px 40px rgba(30,27,24,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--dark);overflow-x:hidden;cursor:default}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--warm)}
+::-webkit-scrollbar-thumb{background:var(--peach);border-radius:10px}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  background:rgba(253,246,236,.96);backdrop-filter:blur(14px);
+  border-bottom:2px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.75rem 2.5rem;
+  box-shadow:0 2px 16px rgba(232,67,58,.07);
+  transition:all .3s;
+}
+.logo{
+  font-family:'Fraunces',serif;font-size:1.55rem;font-weight:900;
+  color:var(--tomato);cursor:pointer;display:flex;align-items:center;gap:.5rem;
+  letter-spacing:-.02em;
+}
+.logo span{color:var(--peach)}
+.nav-links{display:flex;gap:.3rem;align-items:center}
+.nav-links a{
+  padding:.42rem 1rem;border-radius:50px;
+  font-weight:600;font-size:.9rem;color:var(--muted);
+  cursor:pointer;border:none;background:none;
+  transition:all .18s;text-decoration:none;
+}
+.nav-links a:hover,.nav-links a.active{background:var(--peach);color:#fff}
+.cart-btn{
+  position:relative;padding:.42rem 1.1rem;border-radius:50px;
+  background:var(--tomato);color:#fff;font-weight:700;font-size:.9rem;
+  border:none;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:.4rem;
+}
+.cart-btn:hover{background:var(--peach-d);transform:translateY(-1px)}
+.cart-badge{
+  position:absolute;top:-6px;right:-6px;
+  background:var(--honey);color:#fff;
+  width:20px;height:20px;border-radius:50%;
+  font-size:.72rem;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  animation:pop .25s ease;
+}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+/* ─── PAGES ─── */
+.page{display:none;min-height:100vh;padding-top:72px}
+.page.active{display:block;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* ═══════════ HERO ═══════════ */
+.hero{
+  min-height:92vh;display:flex;align-items:center;
+  background:linear-gradient(140deg,#FFF3E8 0%,#FFE4CC 40%,#FFD1B8 70%,#FFBFA8 100%);
+  position:relative;overflow:hidden;padding:2rem 2.5rem;
+}
+.hero-deco{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+}
+.hero-blob{
+  position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;
+  animation:blobDrift 8s ease-in-out infinite alternate;
+}
+@keyframes blobDrift{from{transform:translate(0,0) scale(1)}to{transform:translate(30px,20px) scale(1.08)}}
+.hero-emojis{position:absolute;inset:0;pointer-events:none}
+.he{
+  position:absolute;font-size:2.2rem;opacity:.22;
+  animation:floatE 5s ease-in-out infinite;
+}
+@keyframes floatE{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-20px) rotate(5deg)}}
+
+.hero-content{position:relative;z-index:2;max-width:580px}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(232,67,58,.1);border:1.5px solid rgba(232,67,58,.2);
+  color:var(--tomato);font-weight:700;font-size:.82rem;
+  padding:.35rem 1rem;border-radius:50px;margin-bottom:1.5rem;
+}
+.hero h1{
+  font-family:'Fraunces',serif;font-weight:900;font-style:italic;
+  font-size:clamp(2.8rem,6vw,4.8rem);line-height:1.05;
+  color:var(--dark);margin-bottom:1.2rem;letter-spacing:-.03em;
+}
+.hero h1 em{color:var(--tomato);font-style:normal}
+.hero p{font-size:1.1rem;color:var(--muted);line-height:1.75;max-width:430px;margin-bottom:2rem}
+.hero-actions{display:flex;gap:.9rem;flex-wrap:wrap}
+.btn-primary{
+  padding:.85rem 2rem;border-radius:50px;
+  background:var(--tomato);color:#fff;
+  font-weight:700;font-size:1rem;border:none;cursor:pointer;
+  transition:all .22s;display:flex;align-items:center;gap:.5rem;
+  font-family:'DM Sans',sans-serif;
+  box-shadow:0 6px 22px rgba(232,67,58,.35);
+}
+.btn-primary:hover{background:var(--peach-d);transform:translateY(-3px);box-shadow:0 10px 30px rgba(232,67,58,.45)}
+.btn-ghost{
+  padding:.85rem 2rem;border-radius:50px;
+  background:transparent;color:var(--dark);
+  font-weight:700;font-size:1rem;
+  border:2px solid var(--border);cursor:pointer;
+  transition:all .22s;font-family:'DM Sans',sans-serif;
+}
+.btn-ghost:hover{border-color:var(--peach);color:var(--peach);transform:translateY(-3px)}
+.hero-img{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:42%;max-width:500px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18rem;line-height:1;pointer-events:none;
+  filter:drop-shadow(0 30px 60px rgba(232,67,58,.2));
+  animation:heroFloat 4s ease-in-out infinite;
+}
+@keyframes heroFloat{0%,100%{transform:translateY(-50%) rotate(-3deg)}50%{transform:translateY(-53%) rotate(3deg)}}
+
+/* badges */
+.hero-badges{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.5rem}
+.hbadge{
+  background:#fff;border-radius:50px;padding:.4rem 1rem;
+  font-size:.82rem;font-weight:700;color:var(--dark);
+  box-shadow:0 2px 12px rgba(30,27,24,.08);
+  display:flex;align-items:center;gap:.35rem;
+}
+
+/* ─── SECTION HEADER ─── */
+.sec-head{text-align:center;padding:3.5rem 1rem 2rem}
+.sec-head h2{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(2rem,4vw,3rem);color:var(--dark);
+  margin-bottom:.5rem;letter-spacing:-.02em;
+}
+.sec-head h2 span{color:var(--tomato)}
+.sec-head p{color:var(--muted);font-size:1rem;max-width:450px;margin:0 auto}
+.sec-divider{
+  width:60px;height:4px;border-radius:4px;
+  background:linear-gradient(90deg,var(--tomato),var(--honey));
+  margin:.8rem auto 0;
+}
+
+/* ═══════════ MENU ═══════════ */
+.category-tabs{
+  display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;
+  padding:0 1rem 1.8rem;
+}
+.ctab{
+  padding:.55rem 1.3rem;border-radius:50px;
+  font-weight:700;font-size:.88rem;
+  background:#fff;color:var(--muted);
+  border:2px solid var(--border);cursor:pointer;
+  transition:all .18s;box-shadow:var(--sh);
+}
+.ctab:hover{border-color:var(--peach);color:var(--peach)}
+.ctab.active{
+  background:linear-gradient(135deg,var(--tomato),var(--peach));
+  color:#fff;border-color:transparent;
+  box-shadow:0 4px 18px rgba(232,67,58,.35);
+}
+
+.food-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:1.4rem;padding:0 2rem 4rem;max-width:1250px;margin:0 auto;
+}
+.food-card{
+  background:#fff;border-radius:24px;overflow:hidden;
+  box-shadow:var(--sh);cursor:pointer;
+  transition:all .25s;border:2px solid transparent;
+  position:relative;
+}
+.food-card:hover{transform:translateY(-7px);box-shadow:var(--sh-h);border-color:var(--peach)}
+.food-thumb{
+  height:170px;display:flex;align-items:center;justify-content:center;
+  font-size:5.5rem;position:relative;overflow:hidden;
+}
+.food-thumb::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to top,rgba(255,255,255,.3),transparent)}
+.food-cat-badge{
+  position:absolute;top:12px;left:12px;
+  padding:.22rem .7rem;border-radius:50px;
+  font-size:.7rem;font-weight:800;color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.cat-salado .food-cat-badge{background:var(--mint)}
+.cat-postre .food-cat-badge{background:var(--rose)}
+.cat-mexicano .food-cat-badge{background:var(--tomato)}
+.cat-internacional .food-cat-badge{background:var(--sky)}
+
+.food-fav{
+  position:absolute;top:12px;right:12px;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.9);border:none;
+  font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;backdrop-filter:blur(4px);
+}
+.food-fav:hover{transform:scale(1.15)}
+.food-fav.liked{background:#ffe0e0}
+
+.food-info{padding:1.1rem 1.2rem 1.2rem}
+.food-info h4{
+  font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;
+  color:var(--dark);margin-bottom:.3rem;
+}
+.food-info p{font-size:.83rem;color:var(--muted);line-height:1.5;margin-bottom:.9rem}
+.food-footer{display:flex;align-items:center;justify-content:space-between}
+.food-price{
+  font-family:'Fraunces',serif;font-size:1.35rem;font-weight:900;
+  color:var(--tomato);
+}
+.food-price span{font-size:.85rem;font-weight:500;color:var(--muted);font-family:'DM Sans',sans-serif}
+.add-btn{
+  padding:.5rem 1.1rem;border-radius:50px;
+  background:var(--tomato);color:#fff;
+  font-weight:700;font-size:.85rem;border:none;cursor:pointer;
+  transition:all .2s;display:flex;align-items:center;gap:.3rem;
+}
+.add-btn:hover{background:var(--peach-d);transform:scale(1.05)}
+.add-btn:active{transform:scale(.97)}
+
+/* ═══════════ NOSOTROS ═══════════ */
+.about-wrap{
+  display:grid;grid-template-columns:1fr 1fr;gap:3rem;
+  max-width:1100px;margin:0 auto;padding:0 2rem 4rem;
+  align-items:center;
+}
+.about-visual{
+  background:linear-gradient(135deg,#FFF3E8,#FFD4B0);
+  border-radius:30px;height:420px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10rem;position:relative;overflow:hidden;
+  box-shadow:var(--sh);
+}
+.about-visual::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 70%,rgba(245,166,35,.25),transparent 60%),
+             radial-gradient(ellipse at 70% 30%,rgba(232,67,58,.15),transparent 50%);
+}
+.about-deco-emojis{position:absolute;inset:0;pointer-events:none}
+.ade{position:absolute;font-size:1.8rem;opacity:.3;animation:floatE 4s ease-in-out infinite}
+
+.about-text h2{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:var(--dark);margin-bottom:1rem;letter-spacing:-.02em;line-height:1.15}
+.about-text h2 span{color:var(--tomato)}
+.about-text p{color:var(--muted);line-height:1.8;font-size:.97rem;margin-bottom:1.2rem}
+.about-values{display:flex;flex-direction:column;gap:.8rem;margin-top:1.5rem}
+.about-val{
+  display:flex;align-items:center;gap:1rem;
+  background:#fff;border-radius:14px;padding:.85rem 1.1rem;
+  box-shadow:0 2px 12px rgba(30,27,24,.06);
+  border-left:4px solid var(--peach);
+}
+.about-val:nth-child(2){border-color:var(--honey)}
+.about-val:nth-child(3){border-color:var(--mint)}
+.av-icon{font-size:1.5rem}
+.av-text h5{font-weight:700;font-size:.9rem;color:var(--dark)}
+.av-text p{font-size:.8rem;color:var(--muted)}
+
+/* ═══════════ TESTIMONIOS ═══════════ */
+.testi-strip{
+  background:linear-gradient(135deg,var(--dark) 0%,#2E2A26 100%);
+  padding:4rem 2rem;text-align:center;
+}
+.testi-strip h2{font-family:'Fraunces',serif;font-size:2.2rem;color:#fff;margin-bottom:.5rem}
+.testi-strip p{color:rgba(255,255,255,.6);margin-bottom:2.5rem}
+.testis{display:flex;gap:1.3rem;justify-content:center;flex-wrap:wrap;max-width:1100px;margin:0 auto}
+.testi-card{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;padding:1.5rem;max-width:290px;text-align:left;
+  backdrop-filter:blur(6px);
+}
+.testi-stars{color:var(--honey);font-size:1rem;margin-bottom:.7rem}
+.testi-card p{color:rgba(255,255,255,.85);font-size:.88rem;line-height:1.65;margin-bottom:1rem;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:.7rem}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--peach);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.testi-name{font-weight:700;font-size:.85rem;color:#fff}
+.testi-loc{font-size:.75rem;color:rgba(255,255,255,.5)}
+
+/* ═══════════ CARRITO ═══════════ */
+.cart-drawer{
+  position:fixed;right:-420px;top:0;bottom:0;width:400px;
+  background:#fff;z-index:600;
+  box-shadow:-8px 0 40px rgba(0,0,0,.18);
+  transition:right .35s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+.cart-drawer.open{right:0}
+.cart-overlay-bg{
+  display:none;position:fixed;inset:0;z-index:590;
+  background:rgba(30,27,24,.5);backdrop-filter:blur(3px);
+}
+.cart-overlay-bg.open{display:block}
+.cart-head{
+  padding:1.4rem 1.5rem;border-bottom:2px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cart-head h3{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:900;color:var(--dark)}
+.cart-close{
+  width:36px;height:36px;border-radius:50%;border:2px solid var(--border);
+  background:none;font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.cart-close:hover{background:var(--tomato);color:#fff;border-color:var(--tomato)}
+.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem}
+.cart-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;gap:1rem;color:var(--muted);
+}
+.cart-empty span{font-size:4rem}
+.cart-empty p{font-weight:600}
+.cart-item{
+  display:flex;gap:1rem;align-items:center;
+  padding:.9rem 0;border-bottom:1px solid var(--border);
+}
+.ci-emoji{font-size:2.2rem;width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ci-info{flex:1}
+.ci-info h5{font-weight:700;font-size:.9rem;color:var(--dark)}
+.ci-info p{font-size:.8rem;color:var(--muted)}
+.ci-price{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:900;color:var(--tomato)}
+.ci-qty{display:flex;align-items:center;gap:.4rem;margin-top:.4rem}
+.qty-btn{
+  width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);
+  background:none;font-size:.9rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;font-weight:700;
+}
+.qty-btn:hover{background:var(--peach);color:#fff;border-color:var(--peach)}
+.qty-num{font-weight:700;font-size:.9rem;min-width:20px;text-align:center}
+.ci-del{margin-left:auto;background:none;border:none;font-size:1.1rem;cursor:pointer;opacity:.4;transition:opacity .2s;padding:.2rem}
+.ci-del:hover{opacity:1;color:var(--tomato)}
+
+.cart-footer{padding:1.3rem 1.5rem;border-top:2px solid var(--border)}
+.cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;font-size:.9rem;color:var(--muted)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem}
+.cart-total span:first-child{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900}
+.cart-total span:last-child{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;color:var(--tomato)}
+.checkout-btn{
+  width:100%;padding:1rem;border-radius:14px;
+  background:linear-gradient(135deg,var(--tomato),var(--peach));
+  color:#fff;font-weight:800;font-size:1rem;border:none;cursor:pointer;
+  transition:all .22s;font-family:'DM Sans',sans-serif;
+  box-shadow:0 6px 20px rgba(232,67,58,.35);
+}
+.checkout-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(232,67,58,.45)}
+.clear-btn{
+  width:100%;padding:.65rem;border-radius:10px;margin-top:.6rem;
+  background:none;border:2px solid var(--border);color:var(--muted);
+  font-weight:600;font-size:.85rem;cursor:pointer;transition:all .18s;
+  font-family:'DM Sans',sans-serif;
+}
+.clear-btn:hover{border-color:var(--tomato);color:var(--tomato)}
+
+/* ═══════════ CONTACTO ═══════════ */
+.contact-wrap{
+  display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;
+  max-width:1050px;margin:0 auto;padding:0 2rem 5rem;align-items:start;
+}
+.contact-info{display:flex;flex-direction:column;gap:1.2rem}
+.contact-card{
+  background:#fff;border-radius:20px;padding:1.4rem;
+  box-shadow:var(--sh);display:flex;align-items:center;gap:1rem;
+  transition:transform .2s;
+}
+.contact-card:hover{transform:translateY(-3px);box-shadow:var(--sh-h)}
+.cc-icon{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+  flex-shrink:0;
+}
+.cc-icon.phone{background:linear-gradient(135deg,#e8f5e9,#c8e6c9)}
+.cc-icon.mail{background:linear-gradient(135deg,#e3f2fd,#bbdefb)}
+.cc-icon.wa{background:linear-gradient(135deg,#e8f5e9,#a5d6a7)}
+.cc-icon.ig{background:linear-gradient(135deg,#fce4ec,#f8bbd0)}
+.cc-icon.clock{background:linear-gradient(135deg,#fff8e1,#ffecb3)}
+.cc-text h5{font-weight:700;font-size:.95rem;color:var(--dark)}
+.cc-text p{font-size:.85rem;color:var(--muted);margin-top:.15rem}
+.cc-text a{color:var(--tomato);text-decoration:none;font-weight:600}
+.cc-text a:hover{text-decoration:underline}
+
+.contact-form{
+  background:#fff;border-radius:24px;padding:2rem;
+  box-shadow:var(--sh);border-top:4px solid var(--tomato);
+}
+.contact-form h3{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;color:var(--dark);margin-bottom:1.3rem}
+.fg{margin-bottom:1rem}
+.fg label{display:block;font-weight:700;font-size:.83rem;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.05em}
+.fg input,.fg textarea,.fg select{
+  width:100%;padding:.75rem 1rem;
+  border:2px solid var(--border);border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--dark);
+  background:var(--cream);outline:none;transition:border-color .2s;
+}
+.fg input:focus,.fg textarea:focus{border-color:var(--peach);background:#fff}
+.fg textarea{min-height:110px;resize:vertical}
+.send-btn{
+  width:100%;padding:1rem;border-radius:12px;
+  background:linear-gradient(135deg,var(--tomato),var(--peach));
+  color:#fff;font-weight:800;font-size:1rem;border:none;cursor:pointer;
+  transition:all .22s;font-family:'DM Sans',sans-serif;
+  box-shadow:0 4px 18px rgba(232,67,58,.3);
+}
+.send-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(232,67,58,.4)}
+.form-ok{display:none;background:#e8f5e9;border:2px solid var(--mint);border-radius:12px;padding:1rem;text-align:center;color:var(--mint-d);font-weight:700;margin-top:.8rem}
+.form-ok.show{display:block;animation:fadeUp .4s}
+
+/* ═══════════ MODAL ═══════════ */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:700;
+  background:rgba(30,27,24,.6);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;padding:1rem;
+}
+.modal-bg.open{display:flex;animation:fadeUp .3s}
+.modal{
+  background:#fff;border-radius:28px;
+  max-width:640px;width:100%;max-height:90vh;overflow-y:auto;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);
+  position:relative;
+}
+.modal-hero{height:190px;display:flex;align-items:center;justify-content:center;font-size:7rem;position:relative;border-radius:28px 28px 0 0;overflow:hidden}
+.modal-close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.9);border:none;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,.15);transition:all .2s}
+.modal-close:hover{background:var(--tomato);color:#fff}
+.modal-body{padding:1.8rem 2rem 2rem}
+.modal-body h2{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:900;color:var(--dark);margin-bottom:.4rem}
+.modal-desc{color:var(--muted);font-size:.93rem;line-height:1.7;margin-bottom:1.2rem}
+.modal-meta{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.mpill{background:var(--warm);border-radius:50px;padding:.35rem .9rem;font-size:.82rem;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:.3rem}
+.modal-price-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:1rem}
+.modal-price{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:var(--tomato)}
+.modal-price span{font-size:1rem;font-family:'DM Sans',sans-serif;color:var(--muted);font-weight:400}
+.modal-qty-row{display:flex;align-items:center;gap:.7rem}
+.mqbtn{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);background:none;font-size:1.1rem;font-weight:900;cursor:pointer;transition:all .15s}
+.mqbtn:hover{background:var(--peach);color:#fff;border-color:var(--peach)}
+.mq-num{font-size:1.1rem;font-weight:900;min-width:30px;text-align:center}
+.modal-add-btn{
+  flex:1;padding:.9rem 1.5rem;border-radius:50px;
+  background:linear-gradient(135deg,var(--tomato),var(--peach));
+  color:#fff;font-weight:800;font-size:1rem;border:none;cursor:pointer;
+  transition:all .22s;font-family:'DM Sans',sans-serif;
+  box-shadow:0 4px 18px rgba(232,67,58,.3);
+}
+.modal-add-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(232,67,58,.42)}
+.ingredients-list{margin-top:1.3rem}
+.ingredients-list h4{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;margin-bottom:.7rem;color:var(--dark)}
+.ing-chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.ing-chip{background:var(--cream);border:1.5px solid var(--border);border-radius:50px;padding:.3rem .8rem;font-size:.8rem;color:var(--muted);font-weight:600}
+
+/* ═══════════ TOAST ═══════════ */
+.toast{
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--dark);color:#fff;
+  padding:.85rem 1.8rem;border-radius:50px;
+  font-weight:700;font-size:.9rem;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+  z-index:999;transition:transform .35s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:center;gap:.5rem;white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ═══════════ FOOTER ═══════════ */
+footer{
+  background:var(--dark);color:rgba(255,255,255,.6);
+  text-align:center;padding:2.5rem 1.5rem;
+}
+footer .logo-f{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:#fff;margin-bottom:.5rem}
+footer .logo-f span{color:var(--peach)}
+footer p{font-size:.88rem;line-height:1.8}
+footer a{color:var(--peach);text-decoration:none}
+footer a:hover{text-decoration:underline}
+.footer-line{height:1px;background:rgba(255,255,255,.1);margin:1.2rem 0}
+.social-row{display:flex;gap:.7rem;justify-content:center;margin-top:1rem}
+.social-btn{
+  width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  cursor:pointer;transition:all .2s;text-decoration:none;
+}
+.social-btn:hover{background:var(--peach);border-color:var(--peach)}
+
+/* ═══════════ ORDER SUCCESS ═══════════ */
+.order-success{
+  display:none;position:fixed;inset:0;z-index:800;
+  background:rgba(30,27,24,.7);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:1rem;
+}
+.order-success.open{display:flex;animation:fadeUp .3s}
+.os-card{
+  background:#fff;border-radius:28px;max-width:420px;width:100%;
+  padding:2.5rem 2rem;text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.3);
+}
+.os-emoji{font-size:5rem;margin-bottom:1rem;display:block;animation:popBig .5s cubic-bezier(.4,0,.2,1)}
+@keyframes popBig{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+.os-card h2{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--dark);margin-bottom:.5rem}
+.os-card p{color:var(--muted);line-height:1.7;margin-bottom:1.5rem}
+.os-card .btn-primary{width:100%;justify-content:center}
+
+@media(max-width:768px){
+  .hero-img{display:none}
+  .about-wrap,.contact-wrap{grid-template-columns:1fr}
+  .cart-drawer{width:100%;right:-100%}
+  nav{padding:.7rem 1rem}
+  .hero{padding:2rem 1.2rem 5rem}
+}
+@media(max-width:500px){
+  .food-grid{grid-template-columns:1fr;padding:0 1rem 3rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="showPage('home')">🍽️ Sabor<span>Casero</span></div>
+  <div class="nav-links">
+    <a onclick="showPage('home')" id="nav-home" class="active">Inicio</a>
+    <a onclick="showPage('menu')" id="nav-menu">Menú</a>
+    <a onclick="showPage('nosotros')" id="nav-nosotros">Nosotros</a>
+    <a onclick="showPage('contacto')" id="nav-contacto">Contacto</a>
+  </div>
+  <button class="cart-btn" onclick="toggleCart()">
+    🛒 Mi Pedido
+    <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+  </button>
+</nav>
+
+<!-- CART OVERLAY BG -->
+<div class="cart-overlay-bg" id="cartBg" onclick="toggleCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>🛒 Mi Pedido</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><span>🛒</span><p>Tu carrito está vacío</p><small>¡Agrega algo delicioso!</small></div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-subtotal"><span>Subtotal</span><span id="cartSub">$0</span></div>
+    <div class="cart-subtotal"><span>Envío</span><span style="color:var(--mint);font-weight:700">¡Gratis! 🎉</span></div>
+    <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
+    <button class="checkout-btn" onclick="doCheckout()">✅ Confirmar Pedido</button>
+    <button class="clear-btn" onclick="clearCart()">🗑 Vaciar carrito</button>
+  </div>
+</div>
+
+<!-- ══════ HOME ══════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-deco">
+      <div class="hero-blob" style="width:400px;height:400px;background:#FF9F43;top:-100px;right:15%"></div>
+      <div class="hero-blob" style="width:280px;height:280px;background:#FF6B6B;bottom:-50px;right:30%;animation-delay:2s"></div>
+      <div class="hero-emojis" id="heroEmojis"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-tag">⭐ Hecho con amor cada día</div>
+      <h1>Comida casera <em>deliciosa</em> a tu puerta</h1>
+      <p>Sabores auténticos, ingredientes frescos y recetas con todo el cariño de la cocina de casa. ¡Pide hoy y disfruta!</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('menu')">🍽️ Ver el Menú</button>
+        <button class="btn-ghost" onclick="showPage('contacto')">📲 Contáctanos</button>
+      </div>
+      <div class="hero-badges">
+        <div class="hbadge">🚴 Envío gratis</div>
+        <div class="hbadge">⏱ 40–60 min</div>
+        <div class="hbadge">🌿 Ingredientes frescos</div>
+        <div class="hbadge">❤️ Hecho en casa</div>
+      </div>
+    </div>
+    <div class="hero-img">🍽️</div>
+  </div>
+
+  <!-- Categorías destacadas -->
+  <div class="sec-head">
+    <h2>¿Qué te <span>antoja</span> hoy?</h2>
+    <p>Explora nuestras categorías y elige tu platillo favorito</p>
+    <div class="sec-divider"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;max-width:1000px;margin:0 auto;padding:0 2rem 4rem">
+    <div onclick="openMenuTab('todos')" style="background:linear-gradient(135deg,#FFF3E8,#FFD4B0);border-radius:22px;padding:2rem;text-align:center;cursor:pointer;transition:all .25s;border:2px solid transparent" onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='#FF8C69'" onmouseout="this.style.transform='none';this.style.borderColor='transparent'">
+      <span style="font-size:3.5rem;display:block;margin-bottom:.7rem">🍽️</span>
+      <h3 style="font-family:'Fraunces',serif;font-size:1.15rem;margin-bottom:.3rem">Todo el Menú</h3>
+      <p style="font-size:.83rem;color:var(--muted)">Platillos salados y dulces</p>
+      <span style="display:inline-block;margin-top:.6rem;background:rgba(232,67,58,.12);color:var(--tomato);border-radius:50px;padding:.2rem .7rem;font-size:.78rem;font-weight:800">30 platillos</span>
+    </div>
+    <div onclick="openMenuTab('mexicano')" style="background:linear-gradient(135deg,#FFF8E1,#FFECB3);border-radius:22px;padding:2rem;text-align:center;cursor:pointer;transition:all .25s;border:2px solid transparent" onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='var(--honey)'" onmouseout="this.style.transform='none';this.style.borderColor='transparent'">
+      <span style="font-size:3.5rem;display:block;margin-bottom:.7rem">🇲🇽</span>
+      <h3 style="font-family:'Fraunces',serif;font-size:1.15rem;margin-bottom:.3rem">Cocina Mexicana</h3>
+      <p style="font-size:.83rem;color:var(--muted)">Tacos, tamales, enchiladas...</p>
+      <span style="display:inline-block;margin-top:.6rem;background:rgba(245,166,35,.15);color:var(--honey);border-radius:50px;padding:.2rem .7rem;font-size:.78rem;font-weight:800">10 platillos</span>
+    </div>
+    <div onclick="openMenuTab('salado')" style="background:linear-gradient(135deg,#F0FFF4,#DCFCE7);border-radius:22px;padding:2rem;text-align:center;cursor:pointer;transition:all .25s;border:2px solid transparent" onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='var(--mint)'" onmouseout="this.style.transform='none';this.style.borderColor='transparent'">
+      <span style="font-size:3.5rem;display:block;margin-bottom:.7rem">🥘</span>
+      <h3 style="font-family:'Fraunces',serif;font-size:1.15rem;margin-bottom:.3rem">Platos Internacionales</h3>
+      <p style="font-size:.83rem;color:var(--muted)">Pasta, arroz, pollo, hamburguesas...</p>
+      <span style="display:inline-block;margin-top:.6rem;background:rgba(61,191,160,.15);color:var(--mint-d);border-radius:50px;padding:.2rem .7rem;font-size:.78rem;font-weight:800">10 platillos</span>
+    </div>
+    <div onclick="openMenuTab('postre')" style="background:linear-gradient(135deg,#FFF0F5,#FCE4EC);border-radius:22px;padding:2rem;text-align:center;cursor:pointer;transition:all .25s;border:2px solid transparent" onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='var(--rose)'" onmouseout="this.style.transform='none';this.style.borderColor='transparent'">
+      <span style="font-size:3.5rem;display:block;margin-bottom:.7rem">🍰</span>
+      <h3 style="font-family:'Fraunces',serif;font-size:1.15rem;margin-bottom:.3rem">Postres y Dulces</h3>
+      <p style="font-size:.83rem;color:var(--muted)">Pasteles, flanes, galletas...</p>
+      <span style="display:inline-block;margin-top:.6rem;background:rgba(232,126,161,.15);color:var(--rose);border-radius:50px;padding:.2rem .7rem;font-size:.78rem;font-weight:800">10 platillos</span>
+    </div>
+  </div>
+
+  <!-- Testimonios en home -->
+  <div class="testi-strip">
+    <h2 style="font-family:'Fraunces',serif">Lo que dicen nuestros clientes 💬</h2>
+    <p>Más de 500 familias felices nos respaldan</p>
+    <div class="testis">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p>"¡Los tamales están increíbles! Me recuerdan a los de mi abuela. Ya son mi pedido fijo cada semana."</p>
+        <div class="testi-author"><div class="testi-avatar">👩</div><div><div class="testi-name">Mariana G.</div><div class="testi-loc">Ciudad de México</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p>"El pastel de tres leches es una maravilla. Perfecto para celebraciones. Lo pedí para el cumpleaños de mi hijo y quedó encantado."</p>
+        <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">Carlos R.</div><div class="testi-loc">Guadalajara</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p>"La lasaña boloñesa es espectacular, llega caliente y con mucho queso. ¡Servicio rápido y muy amables!"</p>
+        <div class="testi-author"><div class="testi-avatar">👩</div><div><div class="testi-name">Sofía M.</div><div class="testi-loc">Monterrey</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="logo-f">🍽️ Sabor<span>Casero</span></div>
+    <p>Comida hecha con amor · Pedidos por WhatsApp o correo</p>
+    <p style="margin-top:.4rem"><a href="tel:+525512345678">📞 +52 55 1234-5678</a> &nbsp;·&nbsp; <a href="mailto:hola@saborcasero.mx">✉️ hola@saborcasero.mx</a></p>
+    <div class="footer-line"></div>
+    <div class="social-row">
+      <a class="social-btn" href="#">📘</a>
+      <a class="social-btn" href="#">📸</a>
+      <a class="social-btn" href="#">💬</a>
+    </div>
+    <p style="margin-top:1rem;font-size:.78rem">© 2024 SaborCasero · Todos los derechos reservados</p>
+  </footer>
+</div>
+
+<!-- ══════ MENU ══════ -->
+<div class="page" id="page-menu">
+  <div class="sec-head">
+    <h2>Nuestro <span>Menú</span></h2>
+    <p>Todo preparado con ingredientes frescos y mucho amor</p>
+    <div class="sec-divider"></div>
+  </div>
+  <div class="category-tabs">
+    <button class="ctab active" onclick="switchTab('todos',this)">🍽️ Todos</button>
+    <button class="ctab" onclick="switchTab('mexicano',this)">🇲🇽 Mexicano</button>
+    <button class="ctab" onclick="switchTab('salado',this)">🌍 Internacional</button>
+    <button class="ctab" onclick="switchTab('postre',this)">🍬 Postres</button>
+  </div>
+  <div class="food-grid" id="foodGrid"></div>
+</div>
+
+<!-- ══════ NOSOTROS ══════ -->
+<div class="page" id="page-nosotros">
+  <div class="sec-head">
+    <h2>Sobre <span>Nosotros</span></h2>
+    <p>Conoce la historia detrás de cada platillo</p>
+    <div class="sec-divider"></div>
+  </div>
+  <div class="about-wrap">
+    <div class="about-visual">
+      <span style="position:relative;z-index:2">👩‍🍳</span>
+      <div class="about-deco-emojis" id="aboutDeco"></div>
+    </div>
+    <div class="about-text">
+      <h2>Cocina hecha con <span>corazón</span></h2>
+      <p>SaborCasero nació en 2019 en la cocina de doña Carmen, quien siempre soñó con compartir sus recetas familiares con el mundo. Lo que empezó como un pequeño negocio entre amigos, hoy llega a cientos de familias cada semana.</p>
+      <p>Cada platillo es preparado el mismo día de tu pedido, usando ingredientes frescos del mercado local. Nunca usamos conservadores ni aditivos artificiales: solo sabor auténtico, como en casa.</p>
+      <p>Creemos que la buena comida une a las familias y crea recuerdos. Por eso ponemos el mismo amor en cada taco, en cada pastel y en cada entrega.</p>
+      <div class="about-values">
+        <div class="about-val">
+          <span class="av-icon">🌿</span>
+          <div class="av-text"><h5>Ingredientes frescos</h5><p>Compramos en el mercado local cada mañana</p></div>
+        </div>
+        <div class="about-val">
+          <span class="av-icon">❤️</span>
+          <div class="av-text"><h5>Hecho con amor</h5><p>Recetas familiares con años de tradición</p></div>
+        </div>
+        <div class="about-val">
+          <span class="av-icon">🚴</span>
+          <div class="av-text"><h5>Entrega rápida</h5><p>Tu pedido llega en 40–60 minutos con envío gratis</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="logo-f">🍽️ Sabor<span>Casero</span></div>
+    <p>Comida hecha con amor · Pedidos por WhatsApp o correo</p>
+    <div class="footer-line"></div>
+    <p style="font-size:.78rem">© 2024 SaborCasero</p>
+  </footer>
+</div>
+
+<!-- ══════ CONTACTO ══════ -->
+<div class="page" id="page-contacto">
+  <div class="sec-head">
+    <h2>¡<span>Contáctanos</span>!</h2>
+    <p>Estamos aquí para ayudarte con tu pedido o cualquier duda</p>
+    <div class="sec-divider"></div>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <div class="contact-card">
+        <div class="cc-icon phone">📞</div>
+        <div class="cc-text"><h5>Teléfono</h5><p><a href="tel:+525512345678">+52 55 1234-5678</a></p></div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon wa">💬</div>
+        <div class="cc-text"><h5>WhatsApp</h5><p><a href="https://wa.me/525512345678" target="_blank">+52 55 1234-5678</a><br><small>Respuesta en minutos</small></p></div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon mail">✉️</div>
+        <div class="cc-text"><h5>Correo Electrónico</h5><p><a href="mailto:hola@saborcasero.mx">hola@saborcasero.mx</a></p></div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon ig">📸</div>
+        <div class="cc-text"><h5>Instagram</h5><p><a href="#">@saborcasero.mx</a><br><small>¡Síguenos para ver nuestros platillos!</small></p></div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon clock">🕐</div>
+        <div class="cc-text"><h5>Horario de Pedidos</h5><p>Lunes – Sábado: 8:00 am – 8:00 pm<br>Domingos: 9:00 am – 5:00 pm</p></div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <h3>Envíanos un mensaje 💌</h3>
+      <div class="fg"><label>Tu nombre</label><input id="cName" placeholder="Ej: María López" type="text"></div>
+      <div class="fg"><label>Teléfono o WhatsApp</label><input id="cPhone" placeholder="+52 55 ..." type="tel"></div>
+      <div class="fg"><label>¿Qué necesitas?</label>
+        <select id="cTipo">
+          <option>🛒 Hacer un pedido</option>
+          <option>❓ Información sobre el menú</option>
+          <option>🎂 Pedido especial / Celebración</option>
+          <option>🚴 Información de envío</option>
+          <option>💬 Otro</option>
+        </select>
+      </div>
+      <div class="fg"><label>Mensaje</label><textarea id="cMsg" placeholder="Cuéntanos qué quieres pedir o tu duda..."></textarea></div>
+      <button class="send-btn" onclick="sendForm()">📨 Enviar Mensaje</button>
+      <div class="form-ok" id="formOk">✅ ¡Mensaje enviado! Te contactaremos pronto.</div>
+    </div>
+  </div>
+  <footer>
+    <div class="logo-f">🍽️ Sabor<span>Casero</span></div>
+    <p>© 2024 SaborCasero · <a href="mailto:hola@saborcasero.mx">hola@saborcasero.mx</a></p>
+  </footer>
+</div>
+
+<!-- FOOD MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-hero" id="mHero"></div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<!-- ORDER SUCCESS -->
+<div class="order-success" id="orderSuccess">
+  <div class="os-card">
+    <span class="os-emoji">🎉</span>
+    <h2>¡Pedido Confirmado!</h2>
+    <p>Tu pedido ha sido recibido. Te contactaremos en breve por WhatsApp para coordinar tu entrega. ¡Gracias por elegirnos! 💚</p>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.5rem">Tiempo estimado: <strong>40–60 minutos</strong></p>
+    <button class="btn-primary" style="width:100%;justify-content:center" onclick="closeSuccess()">👍 ¡Listo!</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ DATA ══
+const MENU = [
+  // MEXICANO
+  {id:1,cat:'mexicano',name:'Tacos de Carne Asada',emoji:'🌮',price:95,porciones:'3 tacos',tiempo:'40 min',
+   desc:'Los auténticos tacos norteños de carne asada con cebolla, cilantro, guacamole y salsa verde o roja.',
+   ingredients:['Carne de res arrachera','Tortillas de maíz','Cebolla blanca','Cilantro fresco','Guacamole','Salsa verde'],
+   bg:'linear-gradient(135deg,#FFF8E1,#FFE082)'},
+  {id:2,cat:'mexicano',name:'Tamales de Rajas con Queso',emoji:'🫔',price:40,porciones:'1 pieza',tiempo:'30 min',
+   desc:'Esponjosos tamales de masa de maíz rellenos de rajas de chile poblano con queso Oaxaca.',
+   ingredients:['Masa de maíz','Manteca','Chile poblano','Queso Oaxaca','Hoja de maíz'],
+   bg:'linear-gradient(135deg,#FFF3E8,#FFD4B0)'},
+  {id:3,cat:'mexicano',name:'Enchiladas Verdes',emoji:'🫓',price:85,porciones:'3 piezas',tiempo:'35 min',
+   desc:'Tortillas rellenas de pollo deshebrado bañadas en salsa verde de tomatillo con crema y queso fresco.',
+   ingredients:['Tortillas de maíz','Pollo deshebrado','Tomatillo','Chile serrano','Crema','Queso fresco'],
+   bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)'},
+  {id:4,cat:'mexicano',name:'Pozole Rojo',emoji:'🍲',price:110,porciones:'1 porción grande',tiempo:'45 min',
+   desc:'El caldo festivo mexicano con maíz cacahuazintle, carne de cerdo y chile guajillo. Con todos sus toppings.',
+   ingredients:['Maíz cacahuazintle','Carne de cerdo','Chile guajillo','Chile ancho','Orégano','Tostadas','Rábano','Lechuga'],
+   bg:'linear-gradient(135deg,#FBE9E7,#FFAB91)'},
+  {id:5,cat:'mexicano',name:'Sopa de Lima Yucateca',emoji:'🍋',price:80,porciones:'1 porción',tiempo:'40 min',
+   desc:'La clásica sopa yucateca con pollo deshebrado, caldo aromático y el toque único de lima agria.',
+   ingredients:['Pechuga de pollo','Caldo de pollo','Lima yucateca','Jitomate','Tortillas fritas','Cilantro'],
+   bg:'linear-gradient(135deg,#FFFDE7,#FFF9C4)'},
+  {id:6,cat:'mexicano',name:'Arroz a la Mexicana',emoji:'🍚',price:50,porciones:'1 porción',tiempo:'30 min',
+   desc:'El arroz rojo casero esponjoso, sabroso y perfecto para acompañar cualquier platillo.',
+   ingredients:['Arroz','Jitomate','Cebolla','Ajo','Caldo de pollo','Chícharos','Zanahoria'],
+   bg:'linear-gradient(135deg,#FFF5E6,#FFD4A3)'},
+  {id:7,cat:'mexicano',name:'Guacamole con Totopos',emoji:'🥑',price:70,porciones:'1 porción + totopos',tiempo:'10 min',
+   desc:'Cremoso guacamole auténtico con jitomate, cebolla, chile y cilantro. Servido con totopos artesanales.',
+   ingredients:['Aguacate','Jitomate','Cebolla blanca','Chile serrano','Limón','Cilantro','Totopos artesanales'],
+   bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)'},
+  {id:8,cat:'mexicano',name:'Chilaquiles Rojos',emoji:'🍳',price:90,porciones:'1 porción',tiempo:'25 min',
+   desc:'Totopos bañados en salsa roja de chile guajillo con crema, queso y pollo deshebrado. El desayuno rey.',
+   ingredients:['Totopos','Chile guajillo','Jitomate','Pollo deshebrado','Crema','Queso fresco','Cebolla'],
+   bg:'linear-gradient(135deg,#FBE9E7,#FFCCBC)'},
+  {id:9,cat:'mexicano',name:'Flautas de Papa',emoji:'🥙',price:75,porciones:'4 piezas',tiempo:'30 min',
+   desc:'Crujientes flautas rellenas de puré de papa doradas a la perfección. Con lechuga, crema y salsa.',
+   ingredients:['Tortillas de maíz','Papa','Crema','Queso','Lechuga','Salsa roja','Aceite'],
+   bg:'linear-gradient(135deg,#FFF8E1,#FFE082)'},
+  {id:10,cat:'mexicano',name:'Tamales de Pollo en Mole',emoji:'🫔',price:45,porciones:'1 pieza',tiempo:'30 min',
+   desc:'Tamales rellenos de pollo deshebrado en mole negro, envueltos en hoja de maíz.',
+   ingredients:['Masa de maíz','Pollo deshebrado','Mole negro','Hoja de maíz','Manteca'],
+   bg:'linear-gradient(135deg,#EDE7F6,#D1C4E9)'},
+
+  // INTERNACIONAL (salado)
+  {id:11,cat:'salado',name:'Lasaña Boloñesa',emoji:'🫕',price:120,porciones:'1 porción grande',tiempo:'45 min',
+   desc:'Capas de pasta, salsa boloñesa de carne, bechamel cremosa y queso gratinado. Un clásico italiano.',
+   ingredients:['Láminas de lasaña','Carne molida','Salsa de tomate','Bechamel','Mozzarella','Parmesano'],
+   bg:'linear-gradient(135deg,#FBE9E7,#FFAB91)'},
+  {id:12,cat:'salado',name:'Pasta Carbonara',emoji:'🍝',price:100,porciones:'1 porción',tiempo:'25 min',
+   desc:'Auténtica carbonara romana con espagueti, panceta, yemas de huevo y queso pecorino. Sin crema, como manda la tradición.',
+   ingredients:['Espagueti','Panceta','Yemas de huevo','Queso pecorino','Pimienta negra'],
+   bg:'linear-gradient(135deg,#FFF3E8,#FFD4B0)'},
+  {id:13,cat:'salado',name:'Pollo al Curry con Arroz',emoji:'🍛',price:110,porciones:'1 porción',tiempo:'50 min',
+   desc:'Aromático curry de pollo con leche de coco y especias indias, acompañado de arroz basmati.',
+   ingredients:['Muslos de pollo','Leche de coco','Curry','Cúrcuma','Jitomate','Cebolla','Arroz basmati'],
+   bg:'linear-gradient(135deg,#FFF8E1,#FFECB3)'},
+  {id:14,cat:'salado',name:'Hamburguesa Casera',emoji:'🍔',price:105,porciones:'1 pieza completa',tiempo:'30 min',
+   desc:'Jugosa hamburguesa de carne de res con queso derretido, lechuga, jitomate y nuestra salsa especial.',
+   ingredients:['Carne molida de res','Pan brioche','Queso amarillo','Lechuga','Jitomate','Pepinillos','Salsa especial'],
+   bg:'linear-gradient(135deg,#FFF3E8,#FFD0A8)'},
+  {id:15,cat:'salado',name:'Ramen de Pollo',emoji:'🍜',price:115,porciones:'1 tazón grande',tiempo:'1 h',
+   desc:'Reconfortante ramen japonés con caldo rico, fideos, huevo marinado, alga nori y pollo.',
+   ingredients:['Fideos ramen','Pechuga de pollo','Caldo de pollo','Salsa de soya','Miso','Huevo marinado','Alga nori'],
+   bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)'},
+  {id:16,cat:'salado',name:'Pizza Margarita',emoji:'🍕',price:130,porciones:'1 pizza personal',tiempo:'45 min',
+   desc:'Masa crujiente, salsa de tomate natural, mozzarella fresca y albahaca. La pizza en su expresión más pura.',
+   ingredients:['Masa de pizza','Salsa de tomate','Mozzarella fresca','Albahaca','Aceite de oliva'],
+   bg:'linear-gradient(135deg,#FCE4EC,#F8BBD0)'},
+  {id:17,cat:'salado',name:'Paella de Mariscos',emoji:'🥘',price:145,porciones:'1 porción',tiempo:'1 h',
+   desc:'Arroz con azafrán, camarones, mejillones y pollo al estilo español. Un plato festivo y lleno de sabor.',
+   ingredients:['Arroz paella','Camarones','Mejillones','Pollo','Pimiento','Azafrán','Caldo de mariscos'],
+   bg:'linear-gradient(135deg,#FFF8E1,#FFECB3)'},
+  {id:18,cat:'salado',name:'Sopa de Fideos Casera',emoji:'🍜',price:65,porciones:'1 tazón',tiempo:'25 min',
+   desc:'La clásica sopa de fideos con caldo de jitomate y caldo de pollo, reconfortante y deliciosa.',
+   ingredients:['Fideos','Jitomate','Cebolla','Ajo','Caldo de pollo','Aceite','Cilantro'],
+   bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)'},
+  {id:19,cat:'salado',name:'Pollo al Horno con Papas',emoji:'🍗',price:125,porciones:'1 porción',tiempo:'1 h 10 min',
+   desc:'Jugoso pollo al horno con hierbas aromáticas, limón y papas rústicas. Simple y absolutamente delicioso.',
+   ingredients:['Pollo (pieza completa)','Papa','Ajo','Limón','Romero','Tomillo','Aceite de oliva'],
+   bg:'linear-gradient(135deg,#FFF3E8,#FFD4B0)'},
+  {id:20,cat:'salado',name:'Crema de Elote',emoji:'🌽',price:75,porciones:'1 tazón',tiempo:'35 min',
+   desc:'Cremosa sopa de elote con un toque de epazote, chile y crema. Sabor casero reconfortante.',
+   ingredients:['Elote tierno','Crema','Caldo de pollo','Epazote','Chile serrano','Cebolla','Mantequilla'],
+   bg:'linear-gradient(135deg,#FFFDE7,#FFF9C4)'},
+
+  // POSTRES
+  {id:21,cat:'postre',name:'Pastel de Tres Leches',emoji:'🍰',price:80,porciones:'1 rebanada',tiempo:'30 min',
+   desc:'Esponjoso bizcocho empapado en tres tipos de leche, cubierto con crema batida y fresas frescas.',
+   ingredients:['Bizcocho esponjoso','Leche condensada','Leche evaporada','Crema para batir','Fresas'],
+   bg:'linear-gradient(135deg,#FCE4EC,#F8BBD0)'},
+  {id:22,cat:'postre',name:'Flan Napolitano',emoji:'🍮',price:70,porciones:'1 porción',tiempo:'20 min',
+   desc:'El flan clásico con caramelo dorado, cremoso y suave. La receta de la abuela, tal cual.',
+   ingredients:['Leche condensada','Leche evaporada','Huevos','Vainilla','Azúcar (caramelo)'],
+   bg:'linear-gradient(135deg,#FFF8E1,#FFE082)'},
+  {id:23,cat:'postre',name:'Pastel de Chocolate',emoji:'🎂',price:90,porciones:'1 rebanada',tiempo:'20 min',
+   desc:'Húmedo y esponjoso pastel de chocolate con betún de mantequilla de cacao. Intenso y delicioso.',
+   ingredients:['Harina','Cacao en polvo','Mantequilla','Huevos','Azúcar','Chocolate negro'],
+   bg:'linear-gradient(135deg,#EDE7F6,#D1C4E9)'},
+  {id:24,cat:'postre',name:'Brownies de Nuez',emoji:'🍫',price:55,porciones:'2 piezas',tiempo:'15 min',
+   desc:'Densos, húmedos y con intenso sabor a chocolate. Con nueces crujientes que los hacen irresistibles.',
+   ingredients:['Chocolate oscuro','Mantequilla','Azúcar','Huevos','Harina','Nueces','Vainilla'],
+   bg:'linear-gradient(135deg,#FBE9E7,#FFCCBC)'},
+  {id:25,cat:'postre',name:'Galletas de Chispas',emoji:'🍪',price:45,porciones:'3 galletas',tiempo:'10 min',
+   desc:'Crujientes por fuera, suaves por dentro y llenas de chispas de chocolate. El clásico infalible.',
+   ingredients:['Harina','Mantequilla','Azúcar blanca','Azúcar morena','Huevos','Vainilla','Chispas de chocolate'],
+   bg:'linear-gradient(135deg,#FFF3E8,#FFD4B0)'},
+  {id:26,cat:'postre',name:'Churros con Chocolate',emoji:'🥐',price:65,porciones:'5 churros',tiempo:'20 min',
+   desc:'Churros crujientes con azúcar y canela, acompañados de chocolate caliente para dip. ¡Irresistibles!',
+   ingredients:['Masa de churro','Aceite','Azúcar','Canela','Chocolate oscuro','Leche'],
+   bg:'linear-gradient(135deg,#FFF8E1,#FFE082)'},
+  {id:27,cat:'postre',name:'Cheesecake de Fresa',emoji:'🍓',price:85,porciones:'1 rebanada',tiempo:'10 min',
+   desc:'Cremoso pay de queso sin hornear con base de galleta y cobertura de fresas frescas y mermelada.',
+   ingredients:['Galletas María','Mantequilla','Queso crema','Crema batida','Fresas','Azúcar glass','Vainilla'],
+   bg:'linear-gradient(135deg,#FCE4EC,#F8BBD0)'},
+  {id:28,cat:'postre',name:'Arroz con Leche',emoji:'🥛',price:50,porciones:'1 copa',tiempo:'15 min',
+   desc:'Cremoso y reconfortante arroz con leche con canela y vainilla. Tibio o frío, siempre está delicioso.',
+   ingredients:['Arroz','Leche entera','Azúcar','Canela','Vainilla','Cáscara de limón'],
+   bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)'},
+  {id:29,cat:'postre',name:'Gelatina de Mosaico',emoji:'🟩',price:40,porciones:'1 rebanada',tiempo:'10 min',
+   desc:'Colorida gelatina festiva con cubos de gelatinas de sabores en base de leche. ¡Perfecta para todas las edades!',
+   ingredients:['Gelatinas de colores','Grenetina','Leche condensada','Leche entera'],
+   bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)'},
+  {id:30,cat:'postre',name:'Pastel de Zanahoria',emoji:'🥕',price:85,porciones:'1 rebanada',tiempo:'20 min',
+   desc:'Húmedo pastel de zanahoria con nueces y especias, cubierto con el clásico betún de queso crema.',
+   ingredients:['Zanahoria rallada','Harina','Huevos','Aceite','Canela','Nueces','Queso crema'],
+   bg:'linear-gradient(135deg,#FFF8E1,#FFECB3)'},
+];
+
+// ── STATE ──
+let cart = [];
+let currentTab = 'todos';
+let currentItemId = null;
+let modalQty = 1;
+
+function catLabel(cat){
+  if(cat==='mexicano') return '🇲🇽 Mexicano';
+  if(cat==='salado')   return '🌍 Internacional';
+  if(cat==='postre')   return '🍬 Postre';
+  return cat;
+}
+
+// ── NAV ──
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('nav-'+id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='menu') renderFood();
+}
+
+function openMenuTab(cat){
+  showPage('menu');
+  setTimeout(()=>{
+    currentTab=cat;
+    document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.ctab').forEach(b=>{
+      if(cat==='todos'&&b.textContent.includes('Todos')) b.classList.add('active');
+      if(cat==='mexicano'&&b.textContent.includes('Mexicano')) b.classList.add('active');
+      if(cat==='salado'&&b.textContent.includes('Internacional')) b.classList.add('active');
+      if(cat==='postre'&&b.textContent.includes('Postres')) b.classList.add('active');
+    });
+    renderFood();
+  },80);
+}
+
+function switchTab(tab, btn){
+  currentTab=tab;
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFood();
+}
+
+// ── MENU RENDER ──
+function renderFood(){
+  const grid=document.getElementById('foodGrid');
+  const list=MENU.filter(f=>currentTab==='todos'||f.cat===currentTab);
+  grid.innerHTML=list.map(f=>`
+    <div class="food-card cat-${f.cat}" onclick="openModal(${f.id})">
+      <div class="food-thumb" style="background:${f.bg}">
+        ${f.emoji}
+        <span class="food-cat-badge">${catLabel(f.cat)}</span>
+        <button class="food-fav" id="fav-${f.id}" onclick="event.stopPropagation();toggleFav(${f.id},this)" title="Favorito">🤍</button>
+      </div>
+      <div class="food-info">
+        <h4>${f.name}</h4>
+        <p>${f.desc.slice(0,90)}...</p>
+        <div class="food-footer">
+          <div class="food-price">$${f.price} <span>/ ${f.porciones}</span></div>
+          <button class="add-btn" onclick="event.stopPropagation();quickAdd(${f.id})">+ Agregar</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleFav(id, btn){
+  const liked=btn.textContent==='❤️';
+  btn.textContent=liked?'🤍':'❤️';
+  btn.classList.toggle('liked',!liked);
+}
+
+// ── MODAL ──
+function openModal(id){
+  const f=MENU.find(x=>x.id===id);
+  if(!f) return;
+  currentItemId=id; modalQty=1;
+  const hero=document.getElementById('mHero');
+  hero.style.background=f.bg;
+  hero.innerHTML=`<span style="position:relative;z-index:2">${f.emoji}</span><button class="modal-close" onclick="closeModal()">✕</button>`;
+  document.getElementById('mBody').innerHTML=`
+    <h2>${f.name}</h2>
+    <p class="modal-desc">${f.desc}</p>
+    <div class="modal-meta">
+      <span class="mpill">⏱ ${f.tiempo}</span>
+      <span class="mpill">🍽️ ${f.porciones}</span>
+      <span class="mpill">${catLabel(f.cat)}</span>
+    </div>
+    <div class="ingredients-list">
+      <h4>🥕 Ingredientes</h4>
+      <div class="ing-chips">${f.ingredients.map(i=>`<span class="ing-chip">${i}</span>`).join('')}</div>
+    </div>
+    <div class="modal-price-row">
+      <div class="modal-price">$${f.price} <span>/ ${f.porciones}</span></div>
+      <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap">
+        <div class="modal-qty-row">
+          <button class="mqbtn" onclick="changeQty(-1)">−</button>
+          <span class="mq-num" id="mqNum">1</span>
+          <button class="mqbtn" onclick="changeQty(1)">+</button>
+        </div>
+        <button class="modal-add-btn" onclick="addFromModal(${f.id})">🛒 Agregar — $${f.price}</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('modalBg').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modalBg').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('modalBg').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+function changeQty(d){
+  modalQty=Math.max(1,modalQty+d);
+  document.getElementById('mqNum').textContent=modalQty;
+  const f=MENU.find(x=>x.id===currentItemId);
+  if(f) document.querySelector('.modal-add-btn').textContent=`🛒 Agregar — $${f.price*modalQty}`;
+}
+function addFromModal(id){
+  const f=MENU.find(x=>x.id===id);
+  for(let i=0;i<modalQty;i++) addToCart(f);
+  closeModal();
+}
+function quickAdd(id){
+  const f=MENU.find(x=>x.id===id);
+  addToCart(f);
+}
+
+// ── CART ──
+function addToCart(f){
+  const ex=cart.find(c=>c.id===f.id);
+  if(ex) ex.qty++;
+  else cart.push({...f,qty:1});
+  updateCartUI();
+  showToast(`🛒 ${f.name} agregado`);
+}
+function removeFromCart(id){
+  cart=cart.filter(c=>c.id!==id);
+  updateCartUI();
+}
+function changeItemQty(id,d){
+  const item=cart.find(c=>c.id===id);
+  if(!item) return;
+  item.qty+=d;
+  if(item.qty<=0) removeFromCart(id);
+  else updateCartUI();
+}
+function clearCart(){
+  if(!cart.length) return;
+  if(confirm('¿Vaciar el carrito?')){ cart=[]; updateCartUI(); }
+}
+function updateCartUI(){
+  const badge=document.getElementById('cartBadge');
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const count=cart.reduce((s,c)=>s+c.qty,0);
+  if(count>0){ badge.style.display='flex'; badge.textContent=count; }
+  else badge.style.display='none';
+  // items
+  const el=document.getElementById('cartItems');
+  const footer=document.getElementById('cartFooter');
+  if(!cart.length){
+    el.innerHTML='<div class="cart-empty"><span>🛒</span><p>Tu carrito está vacío</p><small>¡Agrega algo delicioso!</small></div>';
+    footer.style.display='none';
+    return;
+  }
+  footer.style.display='block';
+  el.innerHTML=cart.map(c=>`
+    <div class="cart-item">
+      <div class="ci-emoji" style="background:${c.bg||'var(--warm)'}">${c.emoji}</div>
+      <div class="ci-info">
+        <h5>${c.name}</h5>
+        <p>${c.porciones}</p>
+        <div class="ci-qty">
+          <button class="qty-btn" onclick="changeItemQty(${c.id},-1)">−</button>
+          <span class="qty-num">${c.qty}</span>
+          <button class="qty-btn" onclick="changeItemQty(${c.id},1)">+</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+        <span class="ci-price">$${c.price*c.qty}</span>
+        <button class="ci-del" onclick="removeFromCart(${c.id})">🗑</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('cartSub').textContent='$'+total;
+  document.getElementById('cartTotal').textContent='$'+total;
+}
+function toggleCart(){
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartBg').classList.toggle('open');
+  document.body.style.overflow=document.getElementById('cartDrawer').classList.contains('open')?'hidden':'';
+}
+function doCheckout(){
+  if(!cart.length){ showToast('🛒 Agrega algo primero'); return; }
+  toggleCart();
+  cart=[];
+  updateCartUI();
+  document.getElementById('orderSuccess').classList.add('open');
+}
+function closeSuccess(){
+  document.getElementById('orderSuccess').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── CONTACT FORM ──
+function sendForm(){
+  const name=document.getElementById('cName').value.trim();
+  const msg=document.getElementById('cMsg').value.trim();
+  if(!name||!msg){ showToast('✏️ Por favor completa el formulario'); return; }
+  document.getElementById('formOk').classList.add('show');
+  document.getElementById('cName').value='';
+  document.getElementById('cPhone').value='';
+  document.getElementById('cMsg').value='';
+  setTimeout(()=>document.getElementById('formOk').classList.remove('show'),4000);
+}
+
+// ── HERO EMOJIS ──
+const ems=['🌮','🍰','🥘','🎂','🍜','🥑','🍗','🍪','🌯','🍮'];
+const hE=document.getElementById('heroEmojis');
+ems.forEach((e,i)=>{
+  const el=document.createElement('div');el.className='he';
+  el.textContent=e;
+  el.style.cssText=`left:${10+Math.random()*80}%;top:${5+Math.random()*85}%;animation-delay:${i*.5}s;animation-duration:${4+Math.random()*3}s`;
+  hE.appendChild(el);
+});
+
+// About deco
+const aDE=document.getElementById('aboutDeco');
+['🌿','🍅','🌶️','🧅','🫑','🍋'].forEach((e,i)=>{
+  const el=document.createElement('div');el.className='ade';
+  el.textContent=e;
+  el.style.cssText=`left:${8+Math.random()*80}%;top:${5+Math.random()*85}%;animation-delay:${i*.6}s`;
+  aDE.appendChild(el);
+});
+
+renderFood();
+</script>
+</body>
+</html>
